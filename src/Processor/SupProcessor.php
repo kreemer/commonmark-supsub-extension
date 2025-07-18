@@ -27,33 +27,46 @@
 
 declare(strict_types=1);
 
-namespace Kreemer\CommonmarkSupSubExtension;
+namespace Kreemer\CommonmarkSupSubExtension\Processor;
 
-use Kreemer\CommonmarkAdmonitionExtension\Node\Admonition;
-use Kreemer\CommonmarkAdmonitionExtension\Parser\AdmonitionParser;
-use Kreemer\CommonmarkAdmonitionExtension\Renderer\AdmonitionRenderer;
-use Kreemer\CommonmarkSupSubExtension\Node\Sub;
 use Kreemer\CommonmarkSupSubExtension\Node\Sup;
-use Kreemer\CommonmarkSupSubExtension\Processor\SubProcessor;
-use Kreemer\CommonmarkSupSubExtension\Processor\SupProcessor;
-use Kreemer\CommonmarkSupSubExtension\Renderer\SubRenderer;
-use Kreemer\CommonmarkSupSubExtension\Renderer\SupRenderer;
-use League\CommonMark\Extension\ConfigurableExtensionInterface;
-use League\Config\ConfigurationBuilderInterface;
-use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Delimiter\DelimiterInterface;
+use League\CommonMark\Delimiter\Processor\DelimiterProcessorInterface;
+use League\CommonMark\Node\Inline\AbstractStringContainer;
 
-final class SupSubExtension implements ConfigurableExtensionInterface
+final class SupProcessor implements DelimiterProcessorInterface
 {
-    public function register(EnvironmentBuilderInterface $environment): void
+    public function getOpeningCharacter(): string
     {
-        $environment
-            ->addDelimiterProcessor(new SupProcessor())->addRenderer(Sup::class, new SupRenderer())
-            ->addDelimiterProcessor(new SubProcessor())->addRenderer(Sub::class, new SubRenderer())
-        ;
+        return '^';
     }
 
-    public function configureSchema(ConfigurationBuilderInterface $builder): void
+    public function getClosingCharacter(): string
     {
-        // Do nothing
+        return '^';
+    }
+
+    public function getDelimiterUse(DelimiterInterface $opener, DelimiterInterface $closer): int
+    {
+        return 1;
+    }
+
+    public function getMinLength(): int
+    {
+        return 1;
+    }
+
+    public function process(AbstractStringContainer $opener, AbstractStringContainer $closer, int $delimiterUse): void
+    {
+        $element = new Sup();
+
+        $next = $opener->next();
+        while ($next !== null && $next !== $closer) {
+            $tmp = $next->next();
+            $element->appendChild($next);
+            $next = $tmp;
+        }
+
+        $opener->insertAfter($element);
     }
 }

@@ -27,33 +27,26 @@
 
 declare(strict_types=1);
 
-namespace Kreemer\CommonmarkSupSubExtension;
+namespace Kreemer\CommonmarkSupSubExtension\Renderer;
 
-use Kreemer\CommonmarkAdmonitionExtension\Node\Admonition;
-use Kreemer\CommonmarkAdmonitionExtension\Parser\AdmonitionParser;
-use Kreemer\CommonmarkAdmonitionExtension\Renderer\AdmonitionRenderer;
 use Kreemer\CommonmarkSupSubExtension\Node\Sub;
-use Kreemer\CommonmarkSupSubExtension\Node\Sup;
-use Kreemer\CommonmarkSupSubExtension\Processor\SubProcessor;
-use Kreemer\CommonmarkSupSubExtension\Processor\SupProcessor;
-use Kreemer\CommonmarkSupSubExtension\Renderer\SubRenderer;
-use Kreemer\CommonmarkSupSubExtension\Renderer\SupRenderer;
-use League\CommonMark\Extension\ConfigurableExtensionInterface;
-use League\Config\ConfigurationBuilderInterface;
-use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlElement;
+use Stringable;
 
-final class SupSubExtension implements ConfigurableExtensionInterface
+final class SubRenderer implements NodeRendererInterface
 {
-    public function register(EnvironmentBuilderInterface $environment): void
+    public function render(Node $node, ChildNodeRendererInterface $childRenderer): string|Stringable|null
     {
-        $environment
-            ->addDelimiterProcessor(new SupProcessor())->addRenderer(Sup::class, new SupRenderer())
-            ->addDelimiterProcessor(new SubProcessor())->addRenderer(Sub::class, new SubRenderer())
-        ;
-    }
+        Sub::assertInstanceOf($node);
 
-    public function configureSchema(ConfigurationBuilderInterface $builder): void
-    {
-        // Do nothing
+        return new HtmlElement(
+            'sub',
+            [],
+            $childRenderer->renderNodes($node->children()),
+            false
+        );
     }
 }
