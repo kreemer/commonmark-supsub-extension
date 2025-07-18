@@ -1,0 +1,28 @@
+{
+    "name": "kreemer/commonmark-supsub-extension",
+    "description": "thephpleague/commonmark extension which provides sup / sub.",
+    "type": "commonmark-extension",
+    "require-dev": {
+        "league/commonmark": "^2.3",
+        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "^3.84"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kreemer\\CommonmarkSupSubExtension\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Kreemer\\CommonmarkSupSubExtension\\": "tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "kreemer",
+            "email": "kevin@familie-studer.ch"
+        }
+    ],
+    "require": { }
+}

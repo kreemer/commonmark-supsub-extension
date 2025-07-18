@@ -1,0 +1,17 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+      "ghcr.io/shyim/devcontainers-features/php:latest": {
+        "version": "8.4",
+        "extensionsExtra": "xdebug,mbstring,gd"
+      },
+      "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "DEVSENSE.phptools-vscode"
+      ]
+    }
+  }
+}
